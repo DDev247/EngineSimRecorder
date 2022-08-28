@@ -1,0 +1,107 @@
+﻿<Window x:Class="EngineSimRecorder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EngineSimRecorder"
+        mc:Ignorable="d"
+        Title="Engine Sim Exporter" Height="470" Width="640" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="CanMinimize">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+            <GradientStop Color="#FF4A4867"/>
+            <GradientStop Color="#FF2F2938" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Rectangle x:Name="BG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="#3F000000" RadiusX="25" RadiusY="25" Margin="10,10,10,10"/>
+        <Label x:Name="Title" Content="Engine Sim Exporter" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Foreground="White" FontSize="22" FontWeight="Bold"/>
+        <Button x:Name="Generate_Button" Content="Generate" Click="Generate_Button_Click" HorizontalAlignment="Center" Margin="0,0,0,25" VerticalAlignment="Bottom" Height="45" Width="250" Foreground="White" BorderBrush="{x:Null}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FF4A4867"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <ListBox Visibility="Collapsed" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="380,75,45,85" Background="#4C5F5F5F" Foreground="White" BorderBrush="{x:Null}">
+            <ListBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </ListBox.Resources>
+        </ListBox>
+        <Label x:Name="Sample_Idle_RPM" Content="Sample Idle RPM" FontSize="12" HorizontalAlignment="Left" Margin="45,75,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Sample_Idle_RPM_TB" HorizontalAlignment="Left" Margin="45,100,0,0" TextWrapping="Wrap" Text="850" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Label x:Name="Sample_RPM_Increment" Content="Sample RPM Increment" FontSize="12" HorizontalAlignment="Left" Margin="45,125,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Sample_RPM_Increment_TB" HorizontalAlignment="Left" Margin="45,150,0,0" TextWrapping="Wrap" Text="250" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Label x:Name="Sample_Count" Content="Sample Count" FontSize="12" HorizontalAlignment="Left" Margin="185,125,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Sample_Count_TB" HorizontalAlignment="Left" Margin="185,150,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Label x:Name="Sample_Length" Content="Sample Length (ms)" FontSize="12" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Sample_Length_TB" HorizontalAlignment="Left" Margin="45,200,0,0" TextWrapping="Wrap" Text="1500" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <RadioButton x:Name="Export" Content="Export to BeamNG.drive" FontSize="12" Padding="0,5,5,5" HorizontalAlignment="Left" Margin="45,225,0,0" VerticalAlignment="Top" Foreground="White" BorderThickness="1,1,1,1" BorderBrush="{x:Null}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+
+        <Label x:Name="Filename_Template" Content="Filename Template" FontSize="12" HorizontalAlignment="Left" Margin="45,250,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Filename_Template_TB" HorizontalAlignment="Left" Margin="45,275,0,0" TextWrapping="Wrap" Text="Sample_MyEngine" VerticalAlignment="Top" Width="220" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Label x:Name="Modloader_Location" Content="Modloader location (required version >=0.0.4) 🔗" MouseDoubleClick="Modloader_Location_MouseDoubleClick" FontSize="12" HorizontalAlignment="Left" Margin="45,300,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        
+        <TextBox x:Name="Modloader_Location_TB" TextChanged="Modloader_Location_TB_TextChanged" HorizontalAlignment="Left" Margin="45,325,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <TextBlock x:Name="Note" HorizontalAlignment="Right" Margin="0,95,45,0" VerticalAlignment="Top" FontSize="14" Width="250" Foreground="White" TextWrapping="WrapWithOverflow" TextAlignment="Center" Background="#3F000000" Padding="5,5,5,5">
+            <TextBlock.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBlock.Resources><Run Text="Note: Please don't leave a lot of imports in your main.mr file. This causes long load times.&#xA;If you experience long load times, please insert the length of the delay in seconds"/><Run Language="pl-pl" Text="."/></TextBlock>
+        <TextBox x:Name="Delay_Input" HorizontalAlignment="Right" Margin="0,225,105,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+    </Grid>
+</Window>
