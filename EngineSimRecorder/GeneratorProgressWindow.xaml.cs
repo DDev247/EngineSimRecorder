@@ -19,7 +19,6 @@ namespace EngineSimRecorder
     /// </summary>
     public partial class GeneratorProgressWindow : Window
     {
-        public bool isDone = false;
 
         public GeneratorProgressWindow()
         {
@@ -40,10 +39,20 @@ namespace EngineSimRecorder
 
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
-            if(isDone)
+            if(MainWindow.isDone)
             {
                 Close();
             }
+        }
+
+        private void Open_Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo();
+            psi.UseShellExecute = true;
+            psi.FileName = "explorer";
+            psi.Arguments = Environment.CurrentDirectory + @"\samples";
+
+            System.Diagnostics.Process.Start(psi);
         }
     }
 }

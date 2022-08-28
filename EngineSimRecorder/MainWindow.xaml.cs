@@ -28,6 +28,7 @@ namespace EngineSimRecorder
     {
         public static string MajorStatus;
         public static string MinorStatus;
+        public static bool isDone = false;
 
         private string exe;
         private Settings Settings;
@@ -63,6 +64,8 @@ namespace EngineSimRecorder
             Sample_Length_TB.Text = Settings.SampleLength;
             Export.IsChecked = Settings.ExportToBeam;
             Filename_Template_TB.Text = Settings.FilenameTemplate;
+            Blend_Name_TB.Text = Settings.BlendName;
+            Blend_Path_TB.Text = Settings.BlendPath;
 
             exe = Settings.ExeFile;
             Modloader_Location_TB.Text = exe;
@@ -82,6 +85,8 @@ namespace EngineSimRecorder
             Settings.SampleLength = Sample_Length_TB.Text;
             Settings.ExportToBeam = Export.IsChecked;
             Settings.FilenameTemplate = Filename_Template_TB.Text;
+            Settings.BlendName = Blend_Name_TB.Text;
+            Settings.BlendPath = Blend_Path_TB.Text;
 
             Settings.ExeFile = Modloader_Location_TB.Text;
 
@@ -154,6 +159,7 @@ namespace EngineSimRecorder
 
             MajorStatus = "Done!";
             MinorStatus = "";
+            isDone = true;
             Console.WriteLine("\a");
 
         }
@@ -161,15 +167,25 @@ namespace EngineSimRecorder
         // Launching RPM shit
         private async Task LaunchProcess(int rpm, bool on, bool idle, bool idleOff)
         {
-            if (!Directory.Exists(@"/samples/"))
-                Directory.CreateDirectory(@"/samples/");
+            if (!Directory.Exists(@"samples/"))
+                Directory.CreateDirectory(@"samples/");
 
             // Define the output wav file of the recorded audio
-            string outputFilePath = @"/samples/";
-            if(idle)
-                outputFilePath += $"{Filename_Template_TB.Text}_idle";
+            string outputFilePath = @"samples/";
+            if (Filename_Template_TB.Text == "")
+            {
+                if (idle)
+                    outputFilePath += $"idle";
+                else
+                    outputFilePath += $"{rpm.ToString()}";
+            }
             else
-                outputFilePath += $"{Filename_Template_TB.Text}_{rpm.ToString()}";
+            {
+                if (idle)
+                    outputFilePath += $"{Filename_Template_TB.Text}_idle";
+                else
+                    outputFilePath += $"{Filename_Template_TB.Text}_{rpm.ToString()}";
+            }
 
             if (on)
                 outputFilePath += "_on.wav";
@@ -179,6 +195,7 @@ namespace EngineSimRecorder
                 outputFilePath += "_off.wav";
 
             WasapiLoopbackCapture CaptureInstance = new WasapiLoopbackCapture();
+            CaptureInstance.WaveFormat = new WaveFormat(44100, 32, 1);
             WaveFileWriter RecordedAudioWriter = new WaveFileWriter(outputFilePath, CaptureInstance.WaveFormat);
 
             CaptureInstance.DataAvailable += (s, a) =>
@@ -238,7 +255,7 @@ namespace EngineSimRecorder
             MajorStatus = "Saving Blend";
             MinorStatus = "Setting up output...";
 
-            string outputFileName = @"/samples/engine.sfxBlend2D.json";
+            string outputFileName = $"samples/{Blend_Name_TB.Text}.sfxBlend2D.json";
             string prefix = Filename_Template_TB.Text;
 
             string start = "{" + "\n" +
@@ -262,11 +279,20 @@ namespace EngineSimRecorder
                 if (i == rpms.Length - 1)
                     comma = "";
 
-                if (i == 0)
-                    output += $"        [\"art/sound/engines/{prefix}_idle.wav\", {rpm.ToString()}]{comma}" + "\n";
+                if (prefix == "")
+                {
+                    if (i == 0)
+                        output += $"        [\"{Blend_Path_TB.Text}idle.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    else
+                        output += $"        [\"{Blend_Path_TB.Text}{rpm.ToString()}_off.wav\", {rpm.ToString()}]{comma}" + "\n";
+                }
                 else
-                    output += $"        [\"art/sound/engines/{prefix}_{rpm.ToString()}_off.wav\", {rpm.ToString()}]{comma}" + "\n";
-
+                {
+                    if (i == 0)
+                        output += $"        [\"{Blend_Path_TB.Text}{prefix}_idle.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    else
+                        output += $"        [\"{Blend_Path_TB.Text}{prefix}_{rpm.ToString()}_off.wav\", {rpm.ToString()}]{comma}" + "\n";
+                }
                 i++;
             }
 
@@ -284,14 +310,29 @@ namespace EngineSimRecorder
                 if (i == rpms.Length - 1)
                     comma = "";
 
-                if (i == 0)
+                if (prefix == "")
                 {
-                    output += $"        [\"art/sound/engines/{prefix}_idle.wav\", {rpm.ToString()}]{comma}" + "\n";
-                    output += $"        [\"art/sound/engines/{prefix}_idle_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    if (i == 0)
+                    {
+                        output += $"        [\"{Blend_Path_TB.Text}idle.wav\", {rpm.ToString()}]{comma}" + "\n";
+                        output += $"        [\"{Blend_Path_TB.Text}idle_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    }
+                    else
+                    {
+                        output += $"        [\"{Blend_Path_TB.Text}{rpm.ToString()}_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    }
                 }
                 else
                 {
-                    output += $"        [\"art/sound/engines/{prefix}_{rpm.ToString()}_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    if (i == 0)
+                    {
+                        output += $"        [\"{Blend_Path_TB.Text}{prefix}_idle.wav\", {rpm.ToString()}]{comma}" + "\n";
+                        output += $"        [\"{Blend_Path_TB.Text}{prefix}_idle_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    }
+                    else
+                    {
+                        output += $"        [\"{Blend_Path_TB.Text}{prefix}_{rpm.ToString()}_on.wav\", {rpm.ToString()}]{comma}" + "\n";
+                    }
                 }
 
                 i++;
@@ -309,7 +350,7 @@ namespace EngineSimRecorder
 
             MinorStatus = "Done saving blend";
 
-            System.Windows.MessageBox.Show("Warning: Blend file includes samples in path 'art/sound/engines/'!");
+            //System.Windows.MessageBox.Show("Warning: Blend file includes samples in path 'art/sound/engine/'!");
         }
 
         // Setting exe file (dialog)
@@ -332,6 +373,20 @@ namespace EngineSimRecorder
             Settings.ExeFile = Modloader_Location_TB.Text;
             exe = Settings.ExeFile;
         }
+
+        private void Sample_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Sample_Idle_RPM_TB != null && Sample_RPM_Increment_TB != null && Sample_Count_TB != null)
+            {
+                if (Sample_Idle_RPM_TB.Text != "" && Sample_RPM_Increment_TB.Text != "" && Sample_Count_TB.Text != "")
+                {
+                    int idle = int.Parse(Sample_Idle_RPM_TB.Text, System.Globalization.NumberStyles.Number);
+                    int inc = int.Parse(Sample_RPM_Increment_TB.Text, System.Globalization.NumberStyles.Number);
+                    int count = int.Parse(Sample_Count_TB.Text, System.Globalization.NumberStyles.Number);
+                    Sample_Redline_RPM.Content = "Sample Redline RPM: " + (idle + (inc * count)).ToString();
+                }
+            }
+        }
     }
 
     public class Settings
@@ -351,16 +406,24 @@ namespace EngineSimRecorder
         [JsonProperty("filenameTemplate")]
         public string FilenameTemplate { get; set; }
 
+        [JsonProperty("blendName")]
+        public string BlendName { get; set; }
+
+        [JsonProperty("blendPath")]
+        public string BlendPath { get; set; }
+
         [JsonProperty("exe")]
         public string ExeFile { get; set; }
 
         public Settings()
         {
             SampleIdleRPM = "850";
-            SampleRPMIncrement = "250";
-            SampleLength = "1500";
+            SampleRPMIncrement = "350";
+            SampleLength = "4000";
             ExportToBeam = false;
             FilenameTemplate = "Sample_MyEngine";
+            BlendName = "Sample_MyEngine";
+            BlendPath = "art/sound/engine/MyEngine/";
             ExeFile = "";
         }
     }

@@ -19,7 +19,20 @@
         <TextBlock x:Name="Major" Text="Major Status" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" MaxWidth="350" Margin="0,0,0,60" VerticalAlignment="Center" Foreground="White" FontSize="22" TextAlignment="Center"/>
         <TextBlock x:Name="Minor" Text="Minor Status" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" MaxWidth="350" Margin="0,30,0,0" VerticalAlignment="Center" Foreground="White" FontSize="22" TextAlignment="Center"/>
 
-        <Button x:Name="OK_Button" Content="OK" Click="OK_Button_Click" HorizontalAlignment="Center" Margin="0,0,0,25" VerticalAlignment="Bottom" Height="45" Width="250" Foreground="White" BorderBrush="{x:Null}">
+        <Button x:Name="OK_Button" Content="OK" Click="OK_Button_Click" HorizontalAlignment="Center" Margin="0,0,175,25" VerticalAlignment="Bottom" Height="45" Width="150" Foreground="White" BorderBrush="{x:Null}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FF4A4867"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+        <Button x:Name="Open_Button" Content="Open samples folder" Click="Open_Button_Click" HorizontalAlignment="Center" Margin="175,0,0,25" VerticalAlignment="Bottom" Height="45" Width="150" Foreground="White" BorderBrush="{x:Null}">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

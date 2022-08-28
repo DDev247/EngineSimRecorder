@@ -35,7 +35,8 @@
             </ListBox.Resources>
         </ListBox>
         <Label x:Name="Sample_Idle_RPM" Content="Sample Idle RPM" FontSize="12" HorizontalAlignment="Left" Margin="45,75,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
-        <TextBox x:Name="Sample_Idle_RPM_TB" HorizontalAlignment="Left" Margin="45,100,0,0" TextWrapping="Wrap" Text="850" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+        <Label x:Name="Sample_Redline_RPM" Content="Sample Redline RPM: 9999" FontSize="12" HorizontalAlignment="Left" Margin="145,75,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Sample_Idle_RPM_TB" TextChanged="Sample_TextChanged" HorizontalAlignment="Left" Margin="45,100,0,0" TextWrapping="Wrap" Text="850" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
             <TextBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -44,7 +45,7 @@
         </TextBox>
 
         <Label x:Name="Sample_RPM_Increment" Content="Sample RPM Increment" FontSize="12" HorizontalAlignment="Left" Margin="45,125,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
-        <TextBox x:Name="Sample_RPM_Increment_TB" HorizontalAlignment="Left" Margin="45,150,0,0" TextWrapping="Wrap" Text="250" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
+        <TextBox x:Name="Sample_RPM_Increment_TB" HorizontalAlignment="Left" TextChanged="Sample_TextChanged" Margin="45,150,0,0" TextWrapping="Wrap" Text="250" VerticalAlignment="Top" Width="120" BorderBrush="{x:Null}">
             <TextBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -53,7 +54,7 @@
         </TextBox>
 
         <Label x:Name="Sample_Count" Content="Sample Count" FontSize="12" HorizontalAlignment="Left" Margin="185,125,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
-        <TextBox x:Name="Sample_Count_TB" HorizontalAlignment="Left" Margin="185,150,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}">
+        <TextBox x:Name="Sample_Count_TB" HorizontalAlignment="Left" Margin="185,150,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" TextChanged="Sample_TextChanged">
             <TextBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -79,7 +80,24 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
+        <Label x:Name="Blend_Name" Content="Blend Filename" FontSize="12" HorizontalAlignment="Right" Margin="0,250,45,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Blend_Name_TB" HorizontalAlignment="Right" Margin="0,275,45,0" TextWrapping="Wrap" Text="Sample_MyEngine" VerticalAlignment="Top" Width="220" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
 
+        <Label x:Name="Blend_Path" Content="Blend Path (sample path)" FontSize="12" HorizontalAlignment="Right" Margin="0,300,45,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
+        <TextBox x:Name="Blend_Path_TB" HorizontalAlignment="Right" Margin="0,325,45,0" TextWrapping="Wrap" Text="art/sound/engine/MyEngine/" VerticalAlignment="Top" Width="220" BorderBrush="{x:Null}">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        
         <Label x:Name="Modloader_Location" Content="Modloader location (required version >=0.0.4) 🔗" MouseDoubleClick="Modloader_Location_MouseDoubleClick" FontSize="12" HorizontalAlignment="Left" Margin="45,300,0,0" VerticalAlignment="Top" Foreground="White" Padding="0,5,5,5"/>
         
         <TextBox x:Name="Modloader_Location_TB" TextChanged="Modloader_Location_TB_TextChanged" HorizontalAlignment="Left" Margin="45,325,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" BorderBrush="{x:Null}">
@@ -92,7 +110,7 @@
 
         <TextBlock x:Name="Note" HorizontalAlignment="Right" Margin="0,95,45,0" VerticalAlignment="Top" FontSize="14" Width="250" Foreground="White" TextWrapping="WrapWithOverflow" TextAlignment="Center" Background="#3F000000" Padding="5,5,5,5">
             <TextBlock.Resources>
-                <Style TargetType="{x:Type Border}">
+                <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </TextBlock.Resources><Run Text="Note: Please don't leave a lot of imports in your main.mr file. This causes long load times.&#xA;If you experience long load times, please insert the length of the delay in seconds"/><Run Language="pl-pl" Text="."/></TextBlock>

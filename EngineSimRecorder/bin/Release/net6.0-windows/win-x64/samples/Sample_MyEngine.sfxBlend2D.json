@@ -1,0 +1,17 @@
+{
+    "header" : {
+        "version" : 1
+    },
+    "eventName" : "event:>Engine>default",
+    "samples" :
+    [
+    [
+        ["art/sound/engine/MyEngine/Sample_MyEngine_idle.wav", 850]
+        ]
+        ,
+        [
+        ["art/sound/engine/MyEngine/Sample_MyEngine_idle.wav", 850]
+        ["art/sound/engine/MyEngine/Sample_MyEngine_idle_on.wav", 850]
+	   ]
+    ]
+}
